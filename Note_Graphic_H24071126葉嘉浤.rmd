@@ -1,0 +1,308 @@
+---
+title: "Note_Graphic"
+author: "H24071126葉嘉浤"
+date: "2020/5/6"
+output: html_document
+---
+# 1.統計圖表
+## 敘述統計的圖表
+```{r,out.height=400,out.width=400}
+#給定一個序列或向量
+#1.hist(x) => 直方圖
+#2.boxplot(x) => 盒鬚圖
+#3.density plot：plot(density(x)) => 密度圖
+x.norm <- rnorm(100, mean=0, sd=1)
+hist(x.norm)
+boxplot(x.norm)
+plot(density(x.norm))
+#對離散變數X
+#1.barplot(x) =>長條圖
+#2.pie(x) => 圓餅圖
+x <- sample(c(1:8), 100, replace=TRUE, prob=c(8:1))
+x <- table(x)
+names(x) <- c("A", "B", "C", "D", "E", "F", "G", "H")
+barplot(x)
+pie(x)
+#散布圖可看出兩個隨機變數的關係
+#Use plot(x, y)
+x <- rnorm(100)
+y <- 3*x + rnorm(100, 0, 1)
+plot(x, y)
+
+cor(x, y)
+```
+## 多個隨機變數的散布圖
+```{r,out.height=400,out.width=400}
+#use matrix
+X1 <- matrix(rnorm(30), 10, 3)
+#Use pairs(. . . ).
+pairs(X1, pch = 19)
+```
+
+## 多個類別的盒鬚圖
+```{r,out.height=400,out.width=400}
+#use matrix
+X2 <- matrix(rnorm(50), 10, 5) 
+boxplot(X2)
+```
+
+# 2.用特定的function畫圖
+
+## General plot function: plot(. . . )
+```{}
+plot(x, y,
+type = "p",                圖的形式
+pch = ,                    使用的符號(圓點、十字....)
+main = NULL,               標題
+lty = ,                    線的形式(直線、虛線...)
+lwd = ,                    線的寬度
+cex = ,                    文字大小
+bty="o",                   圖的周圍(預設為四邊都圍起來)
+col = ,                    線或符號的顏色
+xlim = NULL, ylim = NULL,  X軸、Y軸的範圍
+sub = NULL,                圖的副標題
+xlab = NULL, ylab = NULL,  X軸、Y軸的名稱
+cex.main =                 標題的大小
+```
+
+### (b).General plot function: plot(. . . )
+```{r,out.height=400,out.width=400}
+#type = c("p", "l", "b", "s", "o", "h", "n")
+
+#p:點
+#l:線
+#b:點和線
+#o:線穿過點並把點連起來
+#h:線連接點和X軸
+#n:只有兩軸、沒有點或線
+
+par(mfrow = c(2,3)) # split plot ranges
+plot(x, y, type = "p", main = "p")
+plot(x, y, type = "l", main = "l")
+plot(x, y, type = "b", main = "b")
+plot(x, y, type = "o", main = "o")
+plot(x, y, type = "h", main = "h")
+plot(x, y, type = "n", main = "n")
+
+```
+
+### (c).plot(. . . , pch = . . . )
+```{}
+選擇點的樣式(圓點、十字...)
+```
+
+### (d).plot(. . . , cex = . . . )
+```{}
+在圖表表裡面的大小:
+點的大小:cex=預設值乘以倍數
+標題大小:cex.main= 
+軸的大小:cex.axis= 
+軸的名稱的大小:cex.lab= 
+```
+
+### (e).plot(. . . , pch = . . . , cex = . . . )
+```{r,out.height=400,out.width=400}
+par(mfrow = c(2,3)) #分割圖表佔的範圍
+plot(x, y, pch = 1, main = "pch = 1")
+plot(x, y, pch = 3, main = "pch = 3", cex.main = 2)
+plot(x, y, pch = 10, main = "pch = 10", cex.axis = 2)
+plot(x, y, pch = 15, main = "pch = 15", cex = 2, cex.main = 2)
+plot(x, y, pch = 19, main = "pch = 19", cex = 2, cex.axis = 2)
+plot(x, y, pch = "#", main = "pch = #", cex = 2,
+cex.axis = 2, cex.lab = 2, cex.main = 2)
+```
+### (f).plot(. . . , type = “l”, lty =. . . , lwd = . . . )
+```{r,out.height=400,out.width=400}
+#Lines in the plot:
+#線的樣式:lty=1, 2, . . .7
+#線的寬度:lwd=1, 1.25,. . .
+t <- 1:20
+y <- rnorm(20)
+par(mfrow = c(2,3)) #分割圖表佔的範圍
+plot(t, y, type = "l")
+plot(t, y, type = "l", lty = 2)
+plot(t, y, type = "l", lty = 2, lwd = 2)
+plot(t, y, type = "l", lty = 3, lwd = 2)
+plot(t, y, type = "l", lty = 4, lwd = 2)
+plot(t, y, type = "l", lty = 5, lwd = 2)
+```
+
+### (g).plot(. . . , bty = . . . )
+```{r,out.height=400,out.width=400}
+#The box around the plot:
+#bty = c("o", "n", "7", "L", "C", "U")
+#o:把圖的四周圍起來(系統預設)
+#n:圖不圍起來
+#7:只圍圖的上方和右方
+#L:只圍圖的下方或左方
+#C:圍圖的上方、下方、左方
+#U:圍圖的上方、下方、右方
+
+t <- 1:20
+y <- rnorm(20)
+par(mfrow = c(2,3)) #分割圖表佔的範圍
+plot(t, y, type = "l", bty = "o", main = "bty = \" o \"")
+plot(t, y, type = "l", bty = "n", main = "bty = \" n \"")
+plot(t, y, type = "l", bty = "7", main = "bty = \" 7 \"")
+plot(t, y, type = "l", bty = "L", main = "bty = \" L \"")
+plot(t, y, type = "l", bty = "C", main = "bty = \" C \"")
+plot(t, y, type = "l", bty = "U", main = "bty = \" U \"")
+```
+
+## plot(. . . , col = . . . )
+```{r,out.height=400,out.width=400}
+#col：圖的顏色
+#顏色代碼:col = c(1, 2, 3, 4, 5, 6, 7, 8)
+#顏色名:col = c(“red”, “green”, “blue”, “grey”)
+#hexadecimal code(一種16進位制的代碼): col = c(“#009999”, “#0000FF”, . . . )
+#更多顏色: help(palette)
+
+t <- 1:20
+y <- rnorm(20)
+par(mfrow = c(2,3)) #分割圖表佔的範圍
+plot(t, y, type = "l", col = 1)
+plot(t, y, type = "l", col = 2)
+plot(t, y, type = "l", col = "green")
+plot(t, y, type = "l", col = "grey")
+plot(t, y, type = "l", col = "#009999")
+plot(t, y, type = "l", col = "#0000FF")
+```
+
+## plot(. . . , main = . . . , sub = . . . , xlab = . . . , ylab = . . . )
+```{r,out.height=400,out.width=400}
+
+#....:圖的名稱
+#main:圖表的主標題，顯示在圖的上方
+#sub:圖表的副標題，顯示在圖的下方
+#xlab:x軸的名稱
+#ylab:y軸的名稱
+
+
+t <- 1:20
+y <- rnorm(20)
+par(mfrow = c(2,3)) #分割圖表佔的範圍
+plot(t, y, type = "l")
+plot(t, y, type = "l", main = "Time series")
+plot(t, y, type = "l", main = "Time series", sub = "this year")
+plot(t, y, type = "l", main = "Time series", xlab = "time")
+plot(t, y, type = "l", main = "Time series", xlab = "time",
+ylab = "")
+plot(t, y, type = "l", main = "Time series", xlab = "time",
+ylab = "return")
+```
+
+## plot(. . . , xlim = . . . , ylim = . . . )
+```{r,out.height=400,out.width=400}
+#定義隨機變數的範圍
+#xlim = c(a, b): a <= x <= b
+#ylim = c(a, b): a <= y <=b
+t <- 1:20
+y <- rnorm(20)
+par(mfrow = c(2,2)) #分割圖表佔的範圍
+plot(t, y, type = "b")
+plot(t, y, type = "b", xlim = c(0, 50))
+plot(t, y, type = "b", ylim = c(-5, 5))
+plot(t, y, type = "b", xlim = c(0, 50), ylim = c(-5, 5))
+```
+
+## 曲線
+```{r,out.height=400,out.width=400}
+#不使用plot(x, y, type = “l”)
+#用curve(expression, from = ..., to = ...)
+par(mfrow = c(2, 3))
+curve(exp(-x), 0, 10)
+curve(dnorm(x), -10, 10)
+curve(x^2, -10, 10)
+curve(sin, 0, 10)
+curve(3*exp(-3*x), 0, 6)
+curve(5*x+2, 0, 10)
+```
+# 3.在已建立的圖表新增物件
+## 新增點或線到已建立的圖表
+```{r,out.height=400,out.width=400}
+#points(. . . ):新增點
+#lines(. . . ):新增線
+#abline(. . . ):新增斜直線
+
+#abline(a = ..., b = ..., h = ..., v = ..., reg = ..., coef = ...)
+#y = a + bx
+#a：截距、b：斜率
+
+plot(t, y, type = "b")
+abline(h = 0)
+abline(v = 15, lty = 2, col = 8, lwd = 2)
+points(t[15], y[15], pch = 19, col = 2)
+
+x <- rnorm(50)
+y <- 3*x + rnorm(50, 0, 1)
+y1 <- 5*x + rnorm(50, 0, 2)
+
+plot(x, y, type = "p", pch = 19)
+abline(a = 0, b = 3)
+
+points(x, y1, col = 4, pch = 20)
+abline(a = 0, b = 5, col = 4)
+```
+
+## 新增文字到已建立的圖表
+```{r,out.height=400,out.width=400}
+#在任意區域新增
+#text(x, y, labels = . . . )
+#新增在圖表中的物件的符號
+#legend(x, y, legend, . . . )
+x <- rnorm(50)
+y <- 3*x + rnorm(50, 0, 1)
+y1 <- 5*x + rnorm(50, 0, 1)
+plot(x, y, type = "p", pch = 19)
+abline(a = 0, b = 3)
+points(x, y1, col = 4, pch = 20)
+abline(a = 0, b = 5, col = 4)
+text(-1.5, 2, "A", cex = 5)
+text(1, -5, "B", cex = 5, col = 2)
+legend("topleft", c("Y", "Y1"), col = c(1,4), lty = c(1, 1),cex = 1)
+```
+
+## 重排圖的範圍
+```{r,out.height=400,out.width=400}
+#用par(. . . )建立一個任意的區域
+#mfrow = c(2, 2):圖以列的順序顯示
+#mfcol = c(2, 2):圖以行的順序顯示
+#mai, mar = c(3, 3, 1, 1):圖的邊界的大小
+#mai => 英吋
+#mar => 以文字為單位的距離
+x <- rnorm(50)
+y <- 3*x + rnorm(50, 0, 1)
+y1 <- 5*x + rnorm(50, 0, 2)
+par(mfrow = c(1, 1), mar = c(0.5, 0.5, 0.5, 0.5))
+plot(x, y, type = "p", pch = 19)
+abline(a = 0, b = 3)
+points(x, y1, col = 4, pch = 20)
+abline(a = 0, b = 5, col = 4)
+text(-1.5, 2, "A", cex = 5)
+text(1, -5, "B", cex = 5, col = 2)
+legend("topleft", c("Y", "Y1"), col = c(1,4), lty = c(1, 1),cex = 2)
+```
+
+### (d).Split the whole plot by some locations of plot
+```{r,out.height=400,out.width=400}
+#m用layout(. . . )
+#layout(matrix(c(1,2,3,3), 2, 2,byrow=TRUE))
+x <- rnorm(50)
+y <- 3*x + rnorm(50, 0, 1)
+y1 <- 5*x + rnorm(50, 0, 2)
+y2 <- -2*x + rnorm(50, 0, 2)
+layout(matrix(c(1,2,3,3), 2, 2, byrow=TRUE))
+plot(x, y, type = "p", pch = 19, main = "Y")
+abline(a = 0, b = 3)
+plot(x, y1, type = "p", pch = 19, main = "Y1")
+abline(a = 0, b = 5)
+plot(x, y2, type = "p", pch = 19, main = "Y2")
+abline(a = 0, b = -2)
+```
+
+## 獲取更多package
+```{}
+http://web.ntpu.edu.tw/~cflin/Teach/R/R06EN06Graphics.pdf
+Package: ggplot2
+Package: ggmap (or some related to map)
+```

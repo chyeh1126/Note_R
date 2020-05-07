@@ -1,0 +1,246 @@
+---
+title: "Note_Vector_H24071126葉嘉浤"
+author: "H24071126葉嘉浤"
+date: "2020/5/6"
+output: html_document
+---
+# 數值型向量
+## 建立向量
+```{r}
+#將一個向量與另外一個向量組合
+vt1 <- c(1:5)
+vt2 <- c(3:6)
+vt2 <- c(vt2, vt1)
+vt2
+```
+## 用相同的序列形成向量
+```{r}
+#用seq()和rep()產生相同的序列，形成向量
+seq(1, 5, by = 0.5)
+seq(1, 10, length.out = 5)
+rep(3, 12)
+rep(seq(2, 10, 2), 2)
+```
+## 建立空的向量(將向量初始化)
+```{r}
+#要指派物件到向量，須將向量初始化
+null.v <- c()
+null.v
+```
+
+```{r}
+a <- c(3, 5, 9, 10)
+b <- c(14, 15, 17)
+V1 <- c()
+V1 <- c(V1, a, b) 
+V1
+```
+
+```{r}
+b <- c(14, 15, 17)
+V2 <- rep(0, 7) 
+V2[1:4] <- a
+V2
+V2[5:7] <- b
+V2
+```
+
+```{r}
+a <- c(3, 5, 9, 10)
+b <- c(14, 15, 17)
+V3 <- rep(NA, 7) 
+V3[1:4] <- a
+V3
+V3[5:7] <- b
+V3
+```
+#### 何時使用空的向量或已知長度的向量
+```{}
+c( ):容易指派物件，且不需知道長度
+rep(NA, n):知道長度和物件的位置
+```
+## 向量中的元素
+```{r}
+#用unique()回傳每個物件出現的次數
+#用table()計算每個物件出現的次數
+b <- c(3, 3, 3, 3, 5, 5, 1, 2, 10, 10, 8)
+unique(b)
+table(b)
+```
+## 集合運算
+```{r}
+B <- c(3, 1, 5, 4, 7); C <- c(23, 1, 44, 5, 3)
+#聯集
+union(B, C)
+#交集
+intersect(B, C)
+#找出兩個向量中不同的物件
+setdiff(B, C)
+#檢驗是否量兩個向量相同
+setequal(B, C)
+```
+
+```{r}
+#用sort()或order()排序向量中的物件
+#sort(x, decreasing = FALSE, . . . )
+a <- c(3, 4, 2, 7, 10, 23, 8, 9, 11)
+sort(a)
+#遞減排序
+sort(a, decreasing = TRUE)
+```
+## 在已排序的向量中，找物件的位置
+```{r}
+#每個物件都有自己的index
+#order(. . . , na.last = TRUE, decreasing = FALSE)
+a <- c(3, 4, 2, 7, 10, 23, 8, 9, 11)
+inc.order <- order(a)
+dec.order <- order(a, decreasing = TRUE)
+inc.order    #輸出index
+a[inc.order] #輸出物件
+dec.order
+a[dec.order]
+```
+## 將向量中的物件交換位置
+```{r}
+a <- c(3, 4, 2, 7, 10, 23, 8, 9, 11)
+a[5] <- -3
+a[8] <- -1
+a
+```
+## 刪除向量中的物件
+```{r}
+vt1
+vt1[-2]
+vt2
+vt2[-c(3:6)]
+```
+# 2.字串形向量
+## 輸出字串
+```{r}
+"Hello World!!!"
+print("Hello R World!!!")
+```
+## 分割字串
+```{r}
+TEXT1 <- "Let's go to a game."
+strsplit(TEXT1, " ")
+TEXT2 <- "Hurry! We are late!"
+strsplit(TEXT2, "!")
+```
+## 大小寫
+```{r}
+#toupper():所有字元改為大寫
+#tolower():所有字元改為小寫
+toupper(TEXT1)
+tolower(TEXT2)
+```
+## 字串型向量
+```{r}
+#Character vector:由字元或字串構成的向量
+#向量中的所有物件必須是同型態
+colors <- c("red", "yellow", "BLUE")
+more.colors <- c(colors, "green", "cyan")
+more.colors
+#將不同型態的物件放到同一個向量
+z <- c("red", "green", 12)
+z
+```
+### (e).Basic operations for character vectors
+```{r}
+#用substr( )取出子字串
+colors <- c("red", "yellow", "blue")
+substr(colors, 1, 3)
+#用grep()在向量中尋找字元
+#grep ：global regular expression print
+#grep()會回傳想找的字元所在的物件的index
+grep("y", more.colors)
+grep("e", more.colors)
+#找到該字元所在的物件並顯示整個物件
+y.in.V <- grep("y", more.colors)
+e.in.V <- grep("e", more.colors)
+more.colors[y.in.V]
+more.colors[e.in.V]
+#grep()會區分大小寫
+E.in.V <- grep("E", more.colors)
+more.colors[E.in.V]
+#用paste建立字串()
+#同一個字串中，用空白分隔
+paste(colors, "line") 
+#同一個字串中，無分隔
+paste(colors, "line", sep = "" )
+#用";"分隔兩個字串
+paste("I like", colors, collapse = "; ")
+```
+## factor因子
+```{r}
+#factor(): actor(x = character())
+colors <- c("red","yellow", "blue")
+f.c <- factor(colors)
+f.c
+levels(f.c)
+as.integer(f.c)
+```
+# 3.邏輯型向量
+## 相關字元
+```{r}
+#TRUE and FALSE是被保留的字，在程式中用於判斷是否符合邏輯
+#T、F被設定為代表TRUE、FALSE，在全球通用
+TRUE
+FALSE
+T
+F
+```
+## 邏輯
+```{r}
+c(3 < 5, 3 > 5)
+c(3 <= 5, 3 >= 5)
+#“==”:物件相等
+3 == 5
+#“!=”:物件不相等
+3 != 5
+```
+## 布林運算
+```{r}
+A <- c(T, T, F, T, F)
+B <- c(3, 1, 5, 4, 7) 
+A
+B[A] #只會output TRUE 對應的物件
+!A   
+B[!A] #output FALSE 對應的物件
+#查看TRUE、FALSE的數量
+A <- c(T, T, F, T, F)
+sum(A) #TRUE的數量
+sum(!A) #FALSE的數量
+```
+### (d).Logical vector
+```{r}
+#檢驗兩個向量中，每個位置的物件是否相同.
+B <- c(3, 1, 5, 4, 7); C <- c(23, 1, 44, 5, 3)
+B == C
+D <- c(2, 5 ,6, 10)
+B == D
+```
+### (e).“is.” series
+```{r}
+#is.XYZ()：檢驗()中的物件是否屬於XYZ的型態
+#is.null();is.na();is.nan();is.infinite()
+#is.character();is.integer();is.numeric()
+is.null(c())
+c(is.na(NA), is.na(2))
+x1 <- 1:5
+x2 <- c(1:3, 2.2)
+x3 <- colors
+c(is.integer(x1), is.numeric(x1), is.double(x1))
+c(is.integer(x2), is.numeric(x2), is.double(x2))
+c(is.character(x3), is.numeric(x3))
+```
+## 檢驗向量的型態
+```{r}
+#用class()檢驗向量的型態
+a <- c(3, 4, 2, 7, 10, 23, 8, 9, 11)
+b <- c("red", "yellow", "blue")
+c <- c(TRUE, FALSE)
+d <- factor(c)
+c(class(a), class(b), class(c), class(d))
+c(class(2), class(2.0), class(as.integer(2)))
+```
