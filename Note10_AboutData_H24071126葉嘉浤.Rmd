@@ -1,0 +1,151 @@
+---
+title: "Note_AboutData_H24071126葉嘉浤"
+author: "H24071126葉嘉浤"
+date: "2020/5/5"
+output: html_document
+---
+
+# 1.移除NA值
+## 當資料有NA值
+1.is.na(X)：用於向量  
+2.complete.cases(X)：用於向量、矩陣或資料框  
+3.na.omit(X)
+```{r}
+#Ex
+airquality[1:8,]
+dim(airquality)
+no.na <- complete.cases(airquality)
+head(airquality[no.na,])
+#檢驗刪除NA值後，資料的dimension
+data.no.na.1 <- airquality[no.na,]
+dim(data.no.na.1)
+#用na.omit忽略NA值後，看資料的dimension
+data.no.na.2 <- na.omit(airquality)
+dim(data.no.na.2)
+
+```
+
+# 2.數據處理
+## 用 cbind和rbind合併資料
+## 用 cat 分類資料或賦予資料標籤
+```{r}
+#將資料中的變數"wind"分組
+grouped1 <- cut(airquality[,3], 5)
+head(grouped1)
+#將分組後的數值增加標籤
+grouped2 <- cut(airquality[,3], 5,
+                labels = c("G1", "G2", "G3", "G4", "G5"))
+head(grouped2)
+#計算每組的數量
+airquality$group <- grouped2
+table(grouped2)
+#用group排序資料
+order.data.1 <- airquality[order(airquality$group),]
+head(order.data.1)
+order.data.2 <- airquality[order(airquality$group,
+                           airquality$Temp), ]
+head(order.data.2)
+```
+# 3.package：reshape2
+```{r}
+#install.packages("reshape2")
+game <- c("G1", "G2", "G3", "G4", "G5")
+site <- c("M", "O", "L", "O", "L")
+Lin <- c(15, 6, 26, 22, 18)
+Jordan <- c(18, 32, 21, 25, 12)
+Peter <- c(10, 6, 22, 9, 12)
+ballgames <- data.frame(game, site, Lin, Jordan, Peter)
+ballgames
+#用melt(data, id.vars)重塑資料的形狀、大小
+#保留game、site，其他column轉為variable、value兩個column
+#variable為原本沒保留的column名稱，value為對應值
+library(reshape2)
+after.reshape <- melt(ballgames, id.vars = c("game", "site")) 
+after.reshape
+#用dcast呈現特定的格式
+#dcast(dataset,label~variable,value)
+#game、site當標籤、variable為變數、sum為對應的值
+name <- c("Lin","Jordan","Peter")
+after.reshape1 <- dcast(after.reshape,game + site ~ variable,sum)
+after.reshape1
+#variable當標籤、game為變數、sum為對應的值
+after.reshape2 <- dcast(after.reshape, variable ~ game, sum)
+after.reshape2
+#variable當標籤、site為變數、mean為對應的值
+after.reshape3 <- dcast(after.reshape, variable ~ site, mean)
+after.reshape3
+#variable、site當標籤、game為變數、sum為對應的值
+after.reshape4 <- dcast(after.reshape, variable + site ~ game, sum)
+after.reshape4
+#name的欄位出現NA值(因name的長度只有3，但game的長度有9)
+after.reshape4[1:3,1] <- c("Jordan")
+after.reshape4[4:6,1] <- c("Lin")
+after.reshape4[7:9,1] <- c("Peter")
+after.reshape4
+```
+
+```{r}
+#用merge合併資料
+Lin.game <- ballgames[ballgames[,"Lin"] > 20,
+                      c("game", "site", "Lin")]
+Jordan.game <- ballgames[ballgames[,"Jordan"] > 20,
+                         c("game", "site", "Jordan")]
+Lin.game;Jordan.game
+#合併兩筆資料(交集)
+JL.game <- merge(Lin.game, Jordan.game)
+JL.game
+#合併兩筆資料(聯集)
+merge(Lin.game, Jordan.game, all = TRUE)
+#用特定的資料集合併資料
+merge(Lin.game, Jordan.game, all.x = TRUE)
+merge(Lin.game, Jordan.game, all.y = TRUE)
+```
+
+# 4.迴歸
+## 呈現兩個變數的關係
+## 在資料分析前，需用變數關係圖，確認變數的關係
+```{r}
+pairs(airquality[,c(1,3,4)])
+data1 <- airquality[1:120, ]
+data2 <- airquality[121:153, ]
+#lm(formula, data)：線性模型
+#formula：y ~ x1 + x2 (with intercept)
+#formula：y ~ x1 + x2 - 1(no intercept)
+lm1 <- lm(Ozone ~ Temp, data = data1)
+lm2 <- lm(Ozone ~ Temp - 1, data = data1)
+summary(lm1)
+summary(lm2)
+#用適合的模型做預測
+y.predict <- predict(lm1, data2)
+y.predict
+#測試模型的表現
+plot(airquality[, 4], airquality[, 1], pch = 19)
+abline(lm1)
+points(airquality[121:153, 4], y.predict, col = 2, pch = 19)
+#模型做預測的表現
+plot(airquality[121:153, 1], y.predict, pch = 19)
+abline(0, 1)
+```
+
+# 5.package：dplyr
+```{r}
+# install.packages("dplyr")
+library(dplyr)
+y <- sample(1:100, 10)
+mean(y)
+#%>%表示使用某個function
+y %>% mean()
+min(y)
+y %>% min()
+sample(1:100, 5) %>% mean()
+sample(1:100, 10) %>% min()
+nba_stars <- c("Stephen Curry", "LeBron James")
+names <- strsplit(nba_stars, split = " ")
+toupper(names[[1]][2])
+nba_stars %>%
+  strsplit(, split = " ") %>%
+  `[[` (1) %>%
+  `[` (2) %>%
+  toupper()
+
+```

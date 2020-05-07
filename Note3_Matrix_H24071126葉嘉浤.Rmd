@@ -1,0 +1,112 @@
+---
+title: "Note_Matrix_H24071126葉嘉浤"
+author: "H24071126葉嘉浤"
+date: "2020/5/3"
+output: html_document
+---
+# 1.程式碼
+```{r}
+#rbind:以列的方式建立矩陣
+#cbind:以行的方式建立矩陣
+#dim:矩陣維度(M列N行)
+#Ex
+a <- 1:5; b <- 6:10;
+c <- 11:15; d <- 16:20;
+M1 <- rbind(a, b, c, d)
+M1
+M2 <- cbind(a, b, c, d)
+M2
+dim(M1)
+dim(M2)
+```
+# 2.由向量建立矩陣
+```{r}
+#matrix(X,nrow=m,ncol=n)
+#nrow => 列的數量
+#ncol => 行的數量
+#系統預設是以行的方式排列數字
+#byrow => 以列的方式排列數字
+
+#Ex
+X <- 1:20
+matrix(X, nrow = 4, ncol = 5)
+matrix(X, nrow = 5, ncol = 4)
+matrix(X, nrow = 4, ncol = 5, byrow = TRUE)
+matrix(X, nrow = 5, ncol = 4, byrow = TRUE)
+
+```
+# 3.矩陣的列(行)的名稱
+```{r}
+#rownames => 各列的名稱
+#colnames => 各行的向量
+M1
+colnames(M1); rownames(M1)
+#dimnames => 顯示各行與各列的名稱,先顯示列，再顯示行
+dimnames(M1); dimnames(M2)
+#建立矩陣的列(行)的名稱
+colnames(M1) <- c("V1", "V2", "V3", "V4", "V5")
+M1
+```
+# 4.提取矩陣中的元素
+```{r}
+#用[,]來提取元素
+#[,]內,第一個數字為第M列，第二個數字為第N行
+M1
+M1[3,4];M1[2,5]
+#提取一個子區域的元素
+M1[c(2, 4), 3]; M1[c(2, 4), c(3, 5)]
+#提取一整列(行)的元素
+M1[, 4]; M1[3, ]
+M1[c(2, 4), ]; M1[, c(3, 5)]
+#也可以用列(行)的名稱提取整列(行)的元素
+M1[c("b", "c"), ]
+M1[c("b", "c"), c("V2", "V5")]
+#提取元素時，系統會以行的方式去數每個數字的索引
+M1[5];M1[13]
+```
+# 5.矩陣運算
+```{r}
+#矩陣 +,-,*,/ 一個常數=> 對矩陣內各個元素作運算
+A <- matrix(c(1:4), 2, 2)
+A + 3
+A - 1
+A * 5
+A / 4
+#兩個矩陣運算
+#注意:在這邊的矩陣相乘為兩矩陣e各個位置所對應的數字相乘
+B <- matrix(c(5:8), 2, 2)
+A+B
+A*B
+#對某一個列(行)運算
+#colSums => 計算整行的總和
+#rowSums => 計算整列的總和
+#colMeans => 計算整行的平均
+#rowMeans => 計算整列的平均
+colSums(A)
+rowSums(A)
+colMeans(A)
+rowMeans(A)
+```
+# 6.矩陣性質
+```{r}
+#t =>將矩陣內非對角線上的元素互換位置
+t(A)
+#%*% => 將兩個矩陣相乘
+B <- matrix(c(5:8), 2, 2)
+A%*%B
+#diag => 顯示矩陣內對角線上的元素
+diag(A)
+diag(B)
+#det => 矩陣的行列式值
+det(A)
+det(B)
+#solve => 計算某個矩陣的反矩陣
+solve(A)
+solve(B)
+#eigen => 計算矩陣特徵值和特徵向量
+#eigen$value => 顯示矩陣特徵值
+#eigen$vectors => 顯示矩陣特徵向量
+eigen(B)
+eigen(B)$values
+eigen(B)$vectors
+```
